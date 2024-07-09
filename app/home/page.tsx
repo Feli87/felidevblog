@@ -1,6 +1,7 @@
+'use client';
 
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { useState, useEffect } from 'react';
+
 interface Post {
   id: number;
   title: string;
@@ -8,36 +9,31 @@ interface Post {
   authorId: number;
 }
 
-export default async function Home() {
-  const posts = await prisma.post.findMany();
+export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<Post[]>([]);
 
-
-  const addPost = async (formData: FormData)=>{
-    'use server'
-
-    try {
-      await prisma.post.create({
-        data: {
-          title: formData.get('title') as string,
-          published: true,
-          author: { connect: { email: 'felidevjs@gmail.com' } },
-        }
-      })
-    } catch (error) {
-      console.log(error)
+  useEffect(() => {
+    setLoading(true);
+    async function fetchPosts() {
+      const response = await fetch('/api/posts');
+      let posts = await response.json();
+      setPosts(posts);
     }
-  }
+    try {
+      fetchPosts();
+    } catch (error) {
+      console.error(error);
+    }finally {
+      setLoading(false);
+    }
+  }, []);
+
   return (
     <div>
       <h1>Create a New Post</h1>
-      <form action={addPost}>
-        <label>
-          Title
-          <input type="text" name="title" />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      {posts?.map((post: Post) => (
+      {loading && <p>Loading...</p>}
+      {!loading && posts?.map((post: Post) => (
         <p key={post.id}>{post.title}</p>
       ))}
     </div>
