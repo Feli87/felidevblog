@@ -1,13 +1,27 @@
+import { PrismaClient } from '@prisma/client';
+import { useState } from 'react';
 
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+
+// Define the type for a Post
+interface Post {
+  id: number;
+  title: string;
+  published: boolean;
+  authorId: number;
+}
 
 export default async function Home() {
-  const posts = await prisma.post.findMany();
+  const [posts, setPosts] = useState<Post[]>([]);
 
+  // Fetch posts from Prisma
+  const fetchPosts = async () => {
+    const posts = await prisma.post.findMany();
+    setPosts(posts);
+  };
 
-  const addPost = async (formData: FormData)=>{
-    'use server'
+  const addPost = async (formData: FormData) => {
+    'use server';
 
     try {
       await prisma.post.create({
@@ -15,12 +29,19 @@ export default async function Home() {
           title: formData.get('title') as string,
           published: true,
           author: { connect: { email: 'felidevjs@gmail.com' } },
-        }
-      })
+        },
+      });
+
+      // Refetch posts after adding a new one
+      fetchPosts();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
+
+  // Fetch posts when the component mounts
+  fetchPosts();
+
   return (
     <div>
       <h1>Create a New Post</h1>
