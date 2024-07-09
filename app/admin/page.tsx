@@ -1,5 +1,7 @@
 
 import { PrismaClient } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
+
 const prisma = new PrismaClient()
 interface Post {
   id: number;
@@ -22,6 +24,8 @@ export default async function Admin() {
           author: { connect: { email: 'felidevjs@gmail.com' } },
         }
       })
+      revalidatePath('/home')   
+
     } catch (error) {
       console.log(error)
     }
