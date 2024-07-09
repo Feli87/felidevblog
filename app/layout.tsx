@@ -18,9 +18,6 @@ export const metadata: Metadata = {
   generator: "Next.js",
   keywords: ["web development", "blog", "programming", "JavaScript", "React"],
   referrer: "origin",
-  // themeColor: "#000000",
-  // colorScheme: "light",
-  // viewport: "width=device-width, initial-scale=1",
   creator: "Feli",
   publisher: "Feli Dev Blog",
   robots: "index, follow",
@@ -40,8 +37,11 @@ export const metadata: Metadata = {
       siteName: "Feli Dev Blog",
       images: [
           {
-              url: "https://felidevblog.vercel.app/og-image.png",
-          }
+            "url": "https://felidevblog.vercel.app/og-image.png",
+            "width": 1200,
+            "height": 630,
+            "alt": "Feli Dev Blog Open Graph Image"
+        }
       ]
   },
   twitter: {
@@ -50,7 +50,12 @@ export const metadata: Metadata = {
       creator: "@felidevjs",
       title: "Feli Dev Blog",
       description: "Welcome to Feli Dev Blog, where we share insights and stories about web development.",
-      images: "https://felidevblog.vercel.app/twitter-image.png"
+      images: {
+        url: "https://felidevblog.vercel.app/twitter-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Feli Dev Blog Twitter Image"
+    }
   },
   verification: {
       google: "IeHYU3uSNv-x6ET2g1zLaTuVrTSmgyK_aY9DzpbOXy4",
